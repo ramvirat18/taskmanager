@@ -1,8 +1,12 @@
 package com.example.taskmanager.service;
 
+import com.example.taskmanager.entity.Status;
 import com.example.taskmanager.entity.Task;
 import com.example.taskmanager.repository.TaskRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -21,9 +25,9 @@ public class TaskService {
         return taskRepository.save(task);
     }
 
-    public List<Task> getAllTasks()
+    public Page<Task> getAllTasks(Pageable pageable)
     {
-        return taskRepository.findAll();
+        return taskRepository.findAll(pageable);
     }
 
     public Task getTaskById(Long id) {
@@ -50,5 +54,10 @@ public class TaskService {
 
         Task task = taskRepository.findById(id).orElseThrow(()->new RuntimeException("Task is not found"));
         taskRepository.delete(task);
+    }
+
+    public Page<Task> getTasksByStatus(Status status, Pageable pageable)
+    {
+        return taskRepository.findByStatus(status,pageable);
     }
 }

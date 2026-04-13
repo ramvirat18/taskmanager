@@ -1,8 +1,11 @@
 package com.example.taskmanager.controller;
 
+import com.example.taskmanager.entity.Status;
 import com.example.taskmanager.entity.Task;
 import com.example.taskmanager.service.TaskService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,9 +27,9 @@ public class TaskController {
     }
 
     @GetMapping
-    public List<Task> getAllTasks()
+    public Page<Task> getAllTasks(Pageable pageable)
     {
-        return taskService.getAllTasks();
+        return taskService.getAllTasks(pageable);
     }
 
     @GetMapping("/{id}")
@@ -46,6 +49,12 @@ public class TaskController {
     {
         taskService.deleteTask(id);
         return "Task is deleted Succesfully";
+    }
+
+    @GetMapping("/filter")
+    public Page<Task> getTasksByStatus(@RequestParam Status status, Pageable pageable)
+    {
+        return taskService.getTasksByStatus(status,pageable);
     }
 
 
